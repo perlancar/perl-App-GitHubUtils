@@ -10,6 +10,11 @@ use Log::ger;
 
 our %SPEC;
 
+$SPEC{':package'} = {
+    v => 1.1,
+    summary => 'Utilities related to GitHub',
+};
+
 $SPEC{create_the_github_repo} = {
     v => 1.1,
     summary => 'Create github repo',
