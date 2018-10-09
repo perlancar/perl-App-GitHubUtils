@@ -51,11 +51,21 @@ sub create_the_github_repo {
         $repo = Cwd::getcwd();
         $repo =~ s!.+/!!;
     }
+    log_info "Creating repo '%s' ...", $repo;
 
-    my $out;
-    IPC::System::Options::system({log=>1, capture_stdout=>\$out}, "github-cmd", "create-repo", $repo);
+    my ($out, $err);
+    IPC::System::Options::system({log=>1, capture_stdout=>\$out, capture_stderr=>\$err}, "github-cmd", "create-repo", $repo);
+    my $exit = $?;
 
-    [$? ? 500 : 200];
+    if ($exit) {
+        if ($out =~ /name already exists/) {
+            return [412, "Failed: Repo already exists"];
+        } else {
+            return [500, "Failed: $out"];
+        }
+    } else {
+        return [200, "OK", undef, {'func.repo'=>$repo}];
+    }
 }
 
 1;
