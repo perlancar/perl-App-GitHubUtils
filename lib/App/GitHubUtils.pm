@@ -29,14 +29,33 @@ _
 };
 sub create_the_github_repo {
     require App::GitUtils;
+    require Cwd;
+    require IPC::System::Options;
 
-    [200, "OK", $user];
+    my $repo;
+  SET_REPO_NAME:
+    {
+        my $res = App::GitUtils::info();
+        if ($res->[0] == 200) {
+            my $content = do {
+                local $/;
+                my $path = "$res->[2]{git_dir}/config";
+                open my $fh, "<", $path or die "Can't open $path: $!";
+                <$fh>;
+            };
+            if ($content =~ m!^\s*url\s*=\s*.+/([^/]+)\.git\s*$!m) {
+                $repo = $1;
+                last;
+            }
+        }
+        $repo = Cwd::getcwd();
+        $repo =~ s!.+/!!;
+    }
 
-    my $res = App::GitUtils::info();
+    my $out;
+    IPC::System::Options::system({log=>1, capture_stdout=>\$out}, "github-cmd", "create-repo", $repo);
 
-    use DD; dd $res;
-
-    [200];
+    [$? ? 500 : 200];
 }
 
 1;
