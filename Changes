@@ -1,20 +1,20 @@
-0.004   2019-05-29 (PERLANCAR)
+0.004   2019-05-29  Released-By: PERLANCAR
 
 	- Add utility: git-clone-from-github.
 
 
-0.003   2018-10-09 (PERLANCAR)
+0.003   2018-10-09  Released-By: PERLANCAR
 
 	- No functional changes.
 
 	- Fix module Abstract.
 
 
-0.002   2018-10-09 (PERLANCAR)
+0.002   2018-10-09  Released-By: PERLANCAR
 
 	- Tweak logging and return/error message.
 
 
-0.001   2018-10-09 (PERLANCAR)
+0.001   2018-10-09  Released-By: PERLANCAR
 
         - First release.
