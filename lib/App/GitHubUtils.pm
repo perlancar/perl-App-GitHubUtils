@@ -1,6 +1,8 @@
 package App::GitHubUtils;
 
+# AUTHORITY
 # DATE
+# DIST
 # VERSION
 
 use 5.010001;
@@ -15,15 +17,16 @@ $SPEC{':package'} = {
     summary => 'Utilities related to GitHub',
 };
 
-$SPEC{create_the_github_repo} = {
+$SPEC{create_this_repo_on_github} = {
     v => 1.1,
-    summary => 'Create github repo',
+    summary => 'Create this repo on github',
     description => <<'_',
 
-This is a convenient no-argument-needed command to create GitHub repository.
-Will use prog:github-cmd from pm:App::github::cmd to create the repository. To
-find out the repo name to be created, will first check .git/config if it exists.
-Otherwise, will just use the name of the current directory.
+This is a convenient no-argument-needed command to create GitHub repository of
+the current ("this") repo. Will use <prog:github-cmd> from <pm:App::github::cmd>
+to create the repository. To find out the repo name to be created, will first
+check .git/config if it exists. Otherwise, will just use the name of the current
+directory.
 
 _
     args => {
@@ -32,7 +35,7 @@ _
         prog => 'github-cmd',
     },
 };
-sub create_the_github_repo {
+sub create_this_repo_on_github {
     require App::GitUtils;
     require Cwd;
     require IPC::System::Options;
