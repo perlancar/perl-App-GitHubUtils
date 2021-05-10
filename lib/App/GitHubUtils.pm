@@ -30,6 +30,9 @@ directory.
 
 _
     args => {
+        github_cmd_config_profile=>{
+            schema => 'str*',
+        },
     },
     deps => {
         prog => 'github-cmd',
@@ -39,6 +42,8 @@ sub create_this_repo_on_github {
     require App::GitUtils;
     require Cwd;
     require IPC::System::Options;
+
+    my %args = @_;
 
     my $repo;
   SET_REPO_NAME:
@@ -62,7 +67,11 @@ sub create_this_repo_on_github {
     log_info "Creating repo '%s' ...", $repo;
 
     my ($out, $err);
-    IPC::System::Options::system({log=>1, capture_stdout=>\$out, capture_stderr=>\$err}, "github-cmd", "create-repo", $repo);
+    IPC::System::Options::system(
+        {log=>1, capture_stdout=>\$out, capture_stderr=>\$err},
+        "github-cmd",
+        defined($args{github_cmd_config_profile}) ? ("--config-profile", $args{github_cmd_config_profile}) : (),
+        "create-repo", $repo);
     my $exit = $?;
 
     if ($exit) {
