@@ -209,6 +209,34 @@ sub git_clone_from_github {
     }
 }
 
+$SPEC{this_repo_on_github} = {
+    v => 1.1,
+    args => {},
+    deps => {
+        prog => 'this-repo',
+    },
+    links => [
+        {url=>'prog:this-repo'},
+    ],
+};
+sub this_repo_on_github {
+    require IPC::System::Options;
+    require Browser::Open;
+
+    my $repo = `this-repo`;
+    return [412, "this-repo failed"] unless length $repo;
+    chomp($repo);
+    my $stdout;
+    IPC::System::Options::system(
+        {die=>1, log=>1, capture_stdout=>\$stdout},
+        "git", "config", "-l");
+    say $stdout;
+    $stdout =~ m!.*=.*github\.com:?/?([^/]+)/(.+?)(?:\.git)?$!im
+        or return [412, "Can't find github username and repository name from configuration"];
+    Browser::Open::open_browser("https://github.com/$1/$2");
+    [200];
+}
+
 1;
 # ABSTRACT:
 
